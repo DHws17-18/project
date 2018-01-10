@@ -3,10 +3,8 @@
 ###
 
 #ignore data
-dblp-ref
-dblp.v10.zip
+githubdata
 #ignore output
-dblp.csv
 
 
 ###
