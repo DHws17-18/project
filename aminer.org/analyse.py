@@ -29,6 +29,8 @@ def containsKeyWords(line):
     return 0 #print('Error in JSON in line ')
 
 if __name__ == '__main__':
+  #write csv header
+  #writer.writerow(['year', 'id', 'title'])
   #loop over each file in /dblp-ref
   for root, dirs, files in os.walk('./dblp-ref/'):
     for file in files:
