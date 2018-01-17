@@ -20,7 +20,7 @@ def containsKeyWords(line):
       #look for keyword
       if keyword in paperObj['abstract'] or keyword in paperObj['title']:
         #write csv
-        writer.writerow([paperObj['year'], paperObj['id'], paperObj['title']])
+        writer.writerow([paperObj['year'], paperObj['title'], paperObj['abstract']])
         return 1
   #exception handling TODO: keyError bei abstract?!? possible bad format " etc
   except KeyError:
