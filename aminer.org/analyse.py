@@ -4,10 +4,10 @@ import json
 import csv
 
 #TODO keywords
-keywords = [' Neural Network ', ' AI ', ' deep learning ', ' knn ']
+keywords = [' Neural Network ', ' AI ', ' deep learning ', ' ann ']
 
 f = open('dblp.csv','w')
-#seek to begining to overwrite if file already exists
+#seek to beginning to overwrite if file already exists
 f.seek(0)
 writer = csv.writer(f, delimiter=',')
 
@@ -22,7 +22,7 @@ def containsKeyWords(line):
         #write csv
         writer.writerow([paperObj['year'], paperObj['id'], paperObj['title']])
         return 1
-  #exception handeling TODO: keyError bei abstract?!? posible bad format " etc
+  #exception handling TODO: keyError bei abstract?!? possible bad format " etc
   except KeyError:
     return 0 #print('Error in finding key in json')
   except json.decoder.JSONDecodeError:
@@ -45,6 +45,6 @@ if __name__ == '__main__':
             if containsKeyWords(line) == 1:
               found += 1
           print(file, '\tpapers:', count, '\tAI related:', found)
-  #turncate if old file was larger and close outputfilestream
+  #truncate if old file was larger and close outputfilestream
   f.truncate()
   f.close()
