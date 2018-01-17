@@ -86,12 +86,6 @@ class Crawler:
                     year = 'NA'
             except AttributeError:
                 year = 'NA'
-            try:
-                citations = container.find('div', class_='gs_fl').a.text.replace('Cited by ', '')
-                if citations.isdigit() is False:
-                    citations = 0
-            except AttributeError:
-                citations = 0
 
             links_data = {'link': link,
                           'title': title,
