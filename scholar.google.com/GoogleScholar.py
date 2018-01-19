@@ -44,10 +44,10 @@ class Crawler:
 
         if(response.status_code != 200):
                 print("error " + response.status_code)
-                return null
+                return None
 
-        soup = BeautifulSoup(response.text, 'html.parser')        
-        results = self.scrape_scholar_result(soup.body) 
+        soup = BeautifulSoup(response.text, 'html.parser')
+        results = self.scrape_scholar_result(soup.body)
 
         data = dict()
         data['source'] = 'google scholar'
@@ -91,7 +91,6 @@ class Crawler:
                           'title': title,
                           'excerpt': excerpt,
                           'year': year,
-                          'citations': int(citations)
                           }
             results.append(links_data)
 
