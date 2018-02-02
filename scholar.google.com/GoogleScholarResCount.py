@@ -54,7 +54,7 @@ class UrlGenerator(CrawlCount):
         self.startyear = str(self.startyear)
         self.endyear = str(self.endyear)
 
-    #e.g. https://scholar.google.com/scholar?&q=hello+world&num=10&start=0
+    #e.g. https://scholar.google.com/scholar?&q=hello+world&as_ylo=1900&as_yhi=1900&hl=en-us
     @property
     def scholar_url(self):
         url = 'https://scholar.google.com/scholar?&q=' + self.query \
