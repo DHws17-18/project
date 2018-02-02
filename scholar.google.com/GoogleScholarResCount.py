@@ -18,7 +18,7 @@ class CrawlCount:
         print('requesting: ' + url)
         response = requests.get(url, headers=self.headers)
         if response.status_code != 200:
-            print("error " + response.status_code)
+            print("error " + str(response.status_code))
             return None
         soup = BeautifulSoup(response.text, 'html.parser')
         result_count_str = soup.find(id="gs_ab_md").div.get_text().split(' ')[1].replace(',', '')
@@ -30,7 +30,7 @@ class CrawlCount:
         print('requesting: ' + url)
         response = requests.get(url, headers=self.headers)
         if response.status_code != 200:
-            print("error " + response.status_code)
+            print("error " + str(response.status_code))
             return None
         soup = BeautifulSoup(response.text, 'html.parser')
         result_count_str = soup.find(id="gs_ab_md").div.get_text().split(' ')[1].replace(',', '')
