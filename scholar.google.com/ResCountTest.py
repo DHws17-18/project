@@ -5,10 +5,17 @@ from GoogleScholarResCount import CrawlCount
 
 import json
 
-topic = 'neural network'
+topic = 'hello world'
 
-# topic_count = CrawlCount(topic).get_result_count(1900)
-topic_count_dict = CrawlCount(topic).get_year_count_dict(1960, 1962)
+crawl_counter = CrawlCount(topic)
+
+# default: firefox, without private/incognito mode, default binary path for browser
+crawl_counter.fill_res_count_dict(1960, 2017)
+# with options
+# crawl_counter.fill_res_count_dict(1960, 1962, driver='chrome', incognito=True, browser_bin_path='/bin/google-chrome-stable')
+
+topic_count_dict = crawl_counter.result_count_dict
+
 json_obj = json.dumps(topic_count_dict, indent=4)
 fp = open(topic.replace(' ','_') + '.json', 'w')
 print(json_obj)
