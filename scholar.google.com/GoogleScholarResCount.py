@@ -8,6 +8,7 @@ import traceback
 
 from selenium import webdriver
 from selenium.webdriver.firefox.firefox_binary import FirefoxBinary
+from selenium.common.exceptions import NoSuchElementException
 
 class CrawlCount:
     def __init__(self, query='hello world', startyear=1900, endyear=1900, sleeptime=1 ,sleep=True):
@@ -67,16 +68,24 @@ class CrawlCount:
                     chrome_options._binary_location = browser_bin_path
                 driver = webdriver.Chrome(chrome_options=chrome_options)
 
-            url = UrlGenerator(self.query, startyear, startyear).scholar_url
-            if requests.get(url, headers=self.headers).status_code != 200:
-                blocked_by_google = True
-            else:
-                blocked_by_google = False
-
             for year in range(startyear, endyear + 1):
                 url = UrlGenerator(self.query, year, year).scholar_url
                 driver.get(url)
-                if blocked_by_google:
+
+                try:
+                    result_string_list = driver.find_element_by_id("gs_ab_md").text.split(' ')
+                    print(result_string_list)
+                    if result_string_list[0] == 'About':
+                        result_count = int(result_string_list[1].split(',', ''))
+                    else:
+                        result_count = int(result_string_list[0])
+
+                    print(str(year) + ': ' + str(result_count))
+                    self.result_count_dict[year] = result_count
+                    if (sleep):
+                        sleep(self.sleeptime)
+                # if blocked_by_google:
+                except NoSuchElementException:
                     # finding captcha and click to start solving image captcha
                     checkbox_element = driver.find_element_by_id("recaptcha")
                     checkbox_element.click()
@@ -92,12 +101,16 @@ class CrawlCount:
                     driver.switch_to_default_content()
                     submit_button = driver.find_element_by_xpath("//input[@name='submit']")
                     submit_button.click()
-                    blocked_by_google = False
-                result_count = int(driver.find_element_by_id("gs_ab_md").text.split(' ')[1].replace(',', ''))
-                print(str(year) + ': ' + str(result_count))
-                self.result_count_dict[year] = result_count
-                if (sleep):
-                    sleep(self.sleeptime)
+
+                    result_string_list = driver.find_element_by_id("gs_ab_md").text.split(' ')
+                    if result_string_list[0] == 'About':
+                        result_count = int(result_string_list[1].replace(',', ''))
+                    else:
+                        result_count = int(result_string_list[0])
+                    print(str(year) + ': ' + str(result_count))
+                    self.result_count_dict[year] = result_count
+                    if (sleep):
+                        sleep(self.sleeptime)
             driver.quit()
         except:
             exc_type, exc_value, exc_traceback = sys.exc_info()
