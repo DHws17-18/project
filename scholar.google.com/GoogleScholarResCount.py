@@ -39,7 +39,7 @@ class CrawlCount:
 
             # falling back to selenium when blocked by google while crawling is unfinished
             if year <= endyear:
-                self.crawl_result_count_selenium(year, endyear)
+                self.crawl_result_count_selenium(year, endyear, driver=driver, incognito=incognito, browser_bin_path=browser_bin_path)
 
         except:
             exc_type, exc_value, exc_traceback = sys.exc_info()
