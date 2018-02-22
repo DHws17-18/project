@@ -4,29 +4,39 @@ import json
 import csv
 
 #TODO keywords
-keywords = [' Neural Network ', ' AI ', ' deep learning ', ' ann ']
+keywords = [' AI ', ' Artificial Intelligence ', ' knn ', ' ann ', ' artificial neural network ', ' deep learning ', ' machine learning ', " 'thinking' computer systems "]
 
-f = open('dblp.csv','w')
+aiCsv = open('dblp.ai.csv','w')
+allCsv = open('dblp.all.csv','w')
 #seek to beginning to overwrite if file already exists
-f.seek(0)
-writer = csv.writer(f, delimiter=',')
+aiCsv.seek(0)
+allCsv.seek(0)
+aiWriter = csv.writer(aiCsv, delimiter=';')
+allWriter = csv.writer(allCsv, delimiter=';')
 
 def containsKeyWords(line):
-  try:
+  try:    
     #parse json
-    paperObj = json.loads(line)
+    paperObj = json.loads(line)    
     #loop keywords
+    relevant = False
+    hits = []
     for keyword in keywords:
       #look for keyword
       if keyword in paperObj['abstract'] or keyword in paperObj['title']:
-        #write csv
-        writer.writerow([paperObj['year'], paperObj['title'], paperObj['abstract']])
-        return 1
-  #exception handling TODO: keyError bei abstract?!? possible bad format " etc
+          relevant = True
+          hits.append(keyword)
+    #write    
+    if relevant:
+      aiWriter.writerow([paperObj['year'], paperObj['title'].encode('utf-8', 'ignore'), ''.join(hits)])
+      return 1
+    else:
+      allWriter.writerow([paperObj['year'], paperObj['title'].encode('utf-8', 'ignore')])
+      return 0    
   except KeyError:
-    return 0 #print('Error in finding key in json')
+    return 0
   except json.decoder.JSONDecodeError:
-    return 0 #print('Error in JSON in line ')
+    return 0
 
 if __name__ == '__main__':
   #write csv header
@@ -46,5 +56,7 @@ if __name__ == '__main__':
               found += 1
           print(file, '\tpapers:', count, '\tAI related:', found)
   #truncate if old file was larger and close outputfilestream
-  f.truncate()
-  f.close()
+  aiCsv.truncate()
+  aiCsv.close()
+  allCsv.truncate()
+  allCsv.close()
