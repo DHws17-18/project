@@ -76,7 +76,7 @@ class CrawlCount:
                     result_string_list = driver.find_element_by_id("gs_ab_md").text.split(' ')
                     print(result_string_list)
                     if result_string_list[0] == 'About':
-                        result_count = int(result_string_list[1].split(',', ''))
+                        result_count = int(result_string_list[1].replace(',', ''))
                     else:
                         result_count = int(result_string_list[0])
 
