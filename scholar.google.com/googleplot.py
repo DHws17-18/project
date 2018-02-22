@@ -8,19 +8,22 @@ import matplotlib.pylab as plt
 
 print('Google scholar plotting')
 try:
-    years = list(map(str, list(range(1920, 2018))))
+    years = list(range(1920, 2018))
     handles = []
     directory = 'data-backups'
     for fn in os.listdir(directory):
         json_data = json.load(open(directory + '/' + fn))
         result_data = []
         for year in years:
-            result_data.append(json_data[year])
+            result_data.append(json_data[str(year)])
         line, = plt.plot(years, result_data, label=fn)
         handles.append(line)
 
     plt.legend(handles=handles)
 
+    ticks = list(range(min(years), max(years)+1, 5))
+    print('Ticks', ticks)
+    plt.xticks(ticks)
     # plt.savefig('googlescholar_plot.png')
     plt.show()
 
