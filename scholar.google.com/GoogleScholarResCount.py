@@ -5,6 +5,7 @@ import requests
 import urllib.parse
 import sys
 import traceback
+from datetime import datetime
 
 from selenium import webdriver
 from selenium.webdriver.firefox.firefox_binary import FirefoxBinary
@@ -18,7 +19,7 @@ class CrawlCount:
         self.sleep = sleep
         self.sleeptime = sleeptime
         self.headers = {'user-agent': 'Mozilla/5.0'}
-        self.result_count_dict = dict()
+        self.result_count_dict = {'datetime':'', 'results':{}}
 
     def crawl_result_count(self, startyear, endyear, driver='firefox', incognito=False, browser_bin_path=None):
         year = startyear
@@ -33,7 +34,7 @@ class CrawlCount:
                 soup = BeautifulSoup(response.text, 'html.parser')
                 result_count = int(soup.find(id="gs_ab_md").div.get_text().split(' ')[1].replace(',', ''))
                 print(str(year) + ': ' + str(result_count))
-                self.result_count_dict[year] = result_count
+                self.result_count_dict['results'][year] = result_count
                 if (sleep):
                     sleep(self.sleeptime)
                 year += 1
@@ -41,8 +42,11 @@ class CrawlCount:
             # falling back to selenium when blocked by google while crawling is unfinished
             if year <= endyear:
                 self.crawl_result_count_selenium(year, endyear, driver=driver, incognito=incognito, browser_bin_path=browser_bin_path)
+            else:
+                self.result_count_dict['datetime'] = str(datetime.now().isoformat(sep=' ', timespec='minutes'))
 
         except:
+            self.result_count_dict['datetime'] = str(datetime.now().isoformat(sep=' ', timespec='minutes'))
             exc_type, exc_value, exc_traceback = sys.exc_info()
             print("Unexpected error:", sys.exc_info())
             traceback.print_exception(exc_type, exc_value, exc_traceback, limit=2, file=sys.stdout)
@@ -81,7 +85,7 @@ class CrawlCount:
                         result_count = int(result_string_list[0])
 
                     print(str(year) + ': ' + str(result_count))
-                    self.result_count_dict[year] = result_count
+                    self.result_count_dict['results'][year] = result_count
                     if (sleep):
                         sleep(self.sleeptime)
                 # if blocked_by_google:
@@ -108,11 +112,13 @@ class CrawlCount:
                     else:
                         result_count = int(result_string_list[0])
                     print(str(year) + ': ' + str(result_count))
-                    self.result_count_dict[year] = result_count
+                    self.result_count_dict['results'][year] = result_count
                     if (sleep):
                         sleep(self.sleeptime)
+            self.result_count_dict['datetime'] = str(datetime.now().isoformat(sep=' ', timespec='minutes'))
             driver.quit()
         except:
+            self.result_count_dict['datetime'] = str(datetime.now().isoformat(sep=' ', timespec='minutes'))
             exc_type, exc_value, exc_traceback = sys.exc_info()
             print("Unexpected error:", exc_type)
             traceback.print_exception(exc_type, exc_value, exc_traceback, limit=2, file=sys.stdout)
