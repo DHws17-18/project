@@ -9,8 +9,7 @@ topics = [
     # 'artificial intelligence',
     # 'artificial neural network',
     # 'deep learning',
-    'machine learning',
-    # '\'thinking\' computer systems',
+    # 'machine learning',
     ''
 ]
 

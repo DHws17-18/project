@@ -10,11 +10,16 @@ print('Google scholar plotting')
 
 # directories which store json output data
 directiories = [
-    'data-backups',
-    'data-backups-1'
+    # 'data-backups[2018-02-17]',
+    # 'data-backups[2018-02-23]',
+    # 'data-backups[2018-02-27]',
 ]
 
 try:
+
+    #define plot size in inches (width, height) & resolution(DPI)
+    fig = plt.figure(figsize=(18, 8), dpi=100)
+
     years = list(range(1920, 2018))
     handles = []
     for directory in directiories:
@@ -25,7 +30,9 @@ try:
                 result_data.append(json_data['results'][str(year)])
 
             # naming lines in legends
-            label = directory + '/' + str(fn) + ' ' + json_data['datetime']
+            basename = fn.split('.')[0]
+            datetime = '[' + json_data['datetime'] + ']'
+            label =  datetime + '  ' + basename
 
             line, = plt.plot(years, result_data, label=label)
             handles.append(line)
@@ -41,6 +48,7 @@ try:
     # plt.xlim( (2010, 2016) )
     # plt.ylim( (2000000) )
 
+    plt.tight_layout()
     # plt.savefig('googlescholar_plot.png')
     plt.show()
 
