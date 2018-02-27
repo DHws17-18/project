@@ -20,15 +20,13 @@ if __name__ == '__main__':
           years[row['year']]+=1
 #      for ignore in ignoreyears:
 #        years.pop(ignore)
-      try:
-        l = sorted(years.items())
-        x, y = zip(*l)          
-        line, = plt.plot(x, y, label=keyword)
-        handles.append(line)
-        csvfile.seek(0)
-      except:
-        print("error")
+      l = sorted(years.items())
+      x, y = zip(*l)          
+      line, = plt.plot(x, y, label=keyword)
+      handles.append(line)
+      csvfile.seek(0)
 
+      
   with open('dblp.all.csv', 'r') as csvfile: 
     years = blankyears
     reader = csv.DictReader(csvfile, fieldnames = ( 'year', 'title','keywords'), delimiter=';')
@@ -36,14 +34,11 @@ if __name__ == '__main__':
       years[row['year']]+=1
 #    for ignore in ignoreyears:
 #      years.pop(ignore)   
-    try:
-      l = sorted(years.items())
-      x, y = zip(*l)
-      line, = plt.plot(x, y, label=' all')
-      handles.append(line)
-    except:
-      print("error")
-
+    l = sorted(years.items())
+    x, y = zip(*l)
+    line, = plt.plot(x, y, label=' all')
+    handles.append(line)
+    
 
 #  ticks = list(range(1930, 2020, 10))
 #  plt.xticks(ticks)
