@@ -13,6 +13,7 @@ directiories = [
     # 'data-backups[2018-02-17]',
     # 'data-backups[2018-02-23]',
     # 'data-backups[2018-02-27]',
+    # 'data-backups[all]'
 ]
 
 try:
