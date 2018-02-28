@@ -24,6 +24,7 @@ if __name__ == '__main__':
 #        years.pop(ignore)
       l = sorted(years.items())
       x, y = zip(*l)
+      x = list(map(int, x))
       line, = plt.plot(x, y, label=keyword)
       handles.append(line)
       csvfile.seek(0)
@@ -38,6 +39,7 @@ if __name__ == '__main__':
 #      years.pop(ignore)
     l = sorted(years.items())
     x, y = zip(*l)
+    x = list(map(int, x))
     line, = plt.plot(x, y, label=' all')
     handles.append(line)
 
