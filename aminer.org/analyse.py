@@ -8,53 +8,64 @@ keywords = [' AI ', ' Artificial Intelligence ', ' knn ', ' ann ', ' artificial 
 
 aiCsv = open('dblp.ai.csv','w')
 allCsv = open('dblp.all.csv','w')
-#seek to beginning to overwrite if file already exists
 aiCsv.seek(0)
 allCsv.seek(0)
 aiWriter = csv.writer(aiCsv, delimiter=';')
 allWriter = csv.writer(allCsv, delimiter=';')
 
+
 def containsKeyWords(line):
-  try:    
-    #parse json
+  try:
     paperObj = json.loads(line)    
-    #loop keywords
     relevant = False
     hits = []
     for keyword in keywords:
-      #look for keyword
       if keyword in paperObj['abstract'] or keyword in paperObj['title']:
           relevant = True
           hits.append(keyword)
-    #write    
     if relevant:
       aiWriter.writerow([paperObj['year'], paperObj['title'].encode('utf-8', 'ignore'), ''.join(hits)])
-      return 1
+      allWriter.writerow([paperObj['year'], paperObj['title'].encode('utf-8', 'ignore')])
+      return 2
     else:
       allWriter.writerow([paperObj['year'], paperObj['title'].encode('utf-8', 'ignore')])
-      return 0    
+      return 1    
   except KeyError:
-    return 0
-  except json.decoder.JSONDecodeError:
+    #print(line)
     return 0
 
 if __name__ == '__main__':
-  #write csv header
-  #writer.writerow(['year', 'id', 'title'])
-  #loop over each file in /dblp-ref
+  count = 0
+  found = 0
+  notfound = 0
+  emptyfielderror = 0
+  decodererror = 0
+  
   for root, dirs, files in os.walk('./dblp-ref/'):
     for file in files:
-      #check if its json
       if file.endswith('.json'):
-        #read lines
         with open('./dblp-ref/' + file) as dblpfile:
-          count = 0
-          found = 0
           for line in dblpfile:
-            count += 1 
-            if containsKeyWords(line) == 1:
+            count += 1
+            case = containsKeyWords(line)
+            if case == 2:
               found += 1
-          print(file, '\tpapers:', count, '\tAI related:', found)
+            if case == 1:
+              notfound += 1
+            if case == 0:
+              emptyfielderror += 1
+            if case == -1:
+              decodererror += 1
+          print(file)
+
+  print('\nprocessed papers:',count,'\n')
+  print('keyword found:',found)
+  print('keyword not found:',notfound)
+  print('emptyfielderror:',emptyfielderror)
+  print('decodererror:',decodererror)
+  print('sum', found + notfound + emptyfielderror + decodererror)
+
+  
   #truncate if old file was larger and close outputfilestream
   aiCsv.truncate()
   aiCsv.close()
