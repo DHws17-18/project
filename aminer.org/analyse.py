@@ -16,11 +16,16 @@ allWriter = csv.writer(allCsv, delimiter=';')
 
 def containsKeyWords(line):
   try:
-    paperObj = json.loads(line)    
+    paperObj = json.loads(line)
     relevant = False
     hits = []
     for keyword in keywords:
-      if keyword in paperObj['abstract'] or keyword in paperObj['title']:
+      if 'abstract' in paperObj:
+        if keyword in paperObj['abstract'] or keyword in paperObj['title']:
+          relevant = True
+          hits.append(keyword)
+      else:
+        if keyword in paperObj['title']:
           relevant = True
           hits.append(keyword)
     if relevant:
@@ -29,7 +34,7 @@ def containsKeyWords(line):
       return 2
     else:
       allWriter.writerow([paperObj['year'], paperObj['title'].encode('utf-8', 'ignore')])
-      return 1    
+      return 1
   except KeyError:
     #print(line)
     return 0
@@ -40,7 +45,7 @@ if __name__ == '__main__':
   notfound = 0
   emptyfielderror = 0
   decodererror = 0
-  
+
   for root, dirs, files in os.walk('./dblp-ref/'):
     for file in files:
       if file.endswith('.json'):
@@ -65,7 +70,7 @@ if __name__ == '__main__':
   print('decodererror:',decodererror)
   print('sum', found + notfound + emptyfielderror + decodererror)
 
-  
+
   #truncate if old file was larger and close outputfilestream
   aiCsv.truncate()
   aiCsv.close()
