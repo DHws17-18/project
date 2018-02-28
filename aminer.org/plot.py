@@ -11,9 +11,11 @@ handles = []
 
 if __name__ == '__main__':
 
-  with open('dblp.ai.csv', 'r') as csvfile:  
+  plt.figure(figsize=(18,8))
+
+  with open('dblp.ai.csv', 'r') as csvfile:
     for keyword in keywords:
-      years = blankyears
+      years = blankyears.copy()
       reader = csv.DictReader(csvfile, fieldnames = ( 'year', 'title','keywords'), delimiter=';')
       for row in reader:
         if keyword in row['keywords']:
@@ -21,26 +23,27 @@ if __name__ == '__main__':
 #      for ignore in ignoreyears:
 #        years.pop(ignore)
       l = sorted(years.items())
-      x, y = zip(*l)          
+      x, y = zip(*l)
       line, = plt.plot(x, y, label=keyword)
       handles.append(line)
       csvfile.seek(0)
 
-      
-  with open('dblp.all.csv', 'r') as csvfile: 
-    years = blankyears
+
+  with open('dblp.all.csv', 'r') as csvfile:
+    years = blankyears.copy()
     reader = csv.DictReader(csvfile, fieldnames = ( 'year', 'title','keywords'), delimiter=';')
     for row in reader:
       years[row['year']]+=1
 #    for ignore in ignoreyears:
-#      years.pop(ignore)   
+#      years.pop(ignore)
     l = sorted(years.items())
     x, y = zip(*l)
     line, = plt.plot(x, y, label=' all')
     handles.append(line)
-    
+
 
 #  ticks = list(range(1930, 2020, 10))
 #  plt.xticks(ticks)
   plt.legend(handles=handles)
+  plt.tight_layout()
   plt.show()
